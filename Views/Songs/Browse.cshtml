@@ -1,34 +1,48 @@
-﻿@model IEnumerable<Assignment5_Meduna_Naumann.Models.Song>
+﻿@model Assignment5_Meduna_Naumann.Models.SongViewModel
 
 @{
     ViewData["Title"] = "Browse";
 }
 
 <h1>Music Shop</h1>
+<form asp-controller="Songs" asp-action="Browse" method="get">
+    <p>
+        Genre:
+        <select asp-for ="view_genre" asp-items="Model.genres">
+            <option value="">All</option>
+        </select>
+        Artist:
+        <select asp-for="view_artist" asp-items="Model.artists">
+            <option value="">All</option>
+        </select>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.title)
+                @Html.DisplayNameFor(model => model.songs![0].title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.release_date)
+                @Html.DisplayNameFor(model => model.songs![0].release_date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.genre)
+                @Html.DisplayNameFor(model => model.songs![0].genre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.artist)
+                @Html.DisplayNameFor(model => model.songs![0].artist)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.price)
+                @Html.DisplayNameFor(model => model.songs![0].price)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.songs!)
         {
             <tr>
                 <td>

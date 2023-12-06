@@ -18,10 +18,44 @@ namespace Assignment5_Meduna_Naumann.Controllers
         {
             _context = context;
         }
+
+
         // GET: Browse
-        public async Task<IActionResult> Browse()
+        public async Task<IActionResult> Browse(string view_genre, string view_artist)
         {
-            return View(await _context.Song.ToListAsync());
+            if (_context.Song == null) { return Problem("_context.Song == null"); }
+            //Default Values START
+            IQueryable<string> genreQuery = from song in _context.Song
+                                            orderby song.genre
+                                            select song.genre;
+
+            IQueryable<string> artistQuery = from song in _context.Song
+                                             orderby song.artist
+                                             select song.artist;
+
+            var songs = from song in _context.Song
+                        select song;
+            //Default Values END
+            //Filter if not null
+            if (!string.IsNullOrEmpty(view_genre) && !string.Equals(view_genre, "ALL"))
+            {
+                songs = songs.Where(s => s.genre == view_genre);
+                artistQuery = from song in _context.Song
+                              where song.genre == view_genre
+                              orderby song.artist
+                              select song.artist;
+            }
+            if (!string.IsNullOrEmpty(view_artist) && !string.Equals(view_artist, "ALL"))
+            {
+                songs = songs.Where(s => s.artist == view_artist);
+            }
+            var viewModel = new SongViewModel
+            {
+                artists = new SelectList(await artistQuery.Distinct().ToListAsync()),
+                genres  = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                songs   = await songs.ToListAsync()
+            };
+            return View(viewModel);
         }
 
         // GET: Songs
