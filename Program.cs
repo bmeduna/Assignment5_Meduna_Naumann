@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Assignment5_Meduna_Naumann.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<Assignment5_Meduna_NaumannContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Assignment5_Meduna_NaumannContext") ?? throw new InvalidOperationException("Connection string 'Assignment5_Meduna_NaumannContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
