@@ -59,7 +59,7 @@ namespace Assignment5_Meduna_Naumann.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Admin()
         {
               return _context.Song != null ? 
                           View(await _context.Song.ToListAsync()) :
