@@ -1,0 +1,57 @@
+﻿@model Assignment5_Meduna_Naumann.Models.SongViewModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+<form asp-controller="Songs" asp-action="RemoveFromCart" method="post">
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.songs![0].title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.songs![0].release_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.songs![0].genre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.songs![0].artist)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.songs![0].price)
+            </th>
+            <th>
+                Select
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.songs!)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.release_date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.genre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.artist)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.price)
+                </td>
+                <td>
+                    <input name="RemoveItems" type="checkbox" value="@item.Id" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+    <input type="submit" value="Remove From Cart" />
+</form>

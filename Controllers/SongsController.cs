@@ -7,19 +7,70 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Assignment5_Meduna_Naumann.Data;
 using Assignment5_Meduna_Naumann.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Assignment5_Meduna_Naumann.Controllers
 {
     public class SongsController : Controller
     {
         private readonly Assignment5_Meduna_NaumannContext _context;
-
+        private static IEnumerable<Song> cart = new List<Song>();
         public SongsController(Assignment5_Meduna_NaumannContext context)
         {
             _context = context;
         }
 
+        // POST: Cart
+        [HttpPost]
+        public IActionResult AddToCart(string[] CartItems) 
+        {
+            IEnumerable<Song> songs = new List<Song>();
+            foreach(string i in CartItems)
+            {
+                songs = songs.Union(from song in _context.Song where song.Id == Convert.ToInt32(i) select song);
+            }
+            if (!songs.IsNullOrEmpty())
+            {
+                IEnumerable<Song> SongList = songs.ToList();
+                if (!cart.IsNullOrEmpty())
+                {
+                    IEnumerable<Song> temp = cart;
+                    SongList = SongList.Union(temp).DistinctBy(s => s.Id);
+                }
+                cart = SongList;
+            }
+            return RedirectToAction(nameof(Browse));
+        }
+        [HttpPost]
+        public IActionResult RemoveFromCart(string[] RemoveItems)
+        {
+            IEnumerable<Song> songs = new List<Song>();
+            
+            foreach (string i in RemoveItems)
+            {
+                songs = songs.Union(from song in _context.Song where song.Id == Convert.ToInt32(i) select song);
+            }
 
+            if (!songs.IsNullOrEmpty())
+            {
+                var temp = cart.ToList();
+                foreach(Song s in songs) { temp.Remove(s); }
+                cart = temp;
+            }
+
+            return RedirectToAction(nameof(Cart));
+        }
+        
+
+        // GET: CARRRT
+        public async Task<IActionResult> Cart()
+        {
+            var SongView = new SongViewModel
+            {
+                songs = cart.ToList()
+            };
+            return View(SongView);
+        }
         // GET: Browse
         public async Task<IActionResult> Browse(string view_genre, string view_artist)
         {
