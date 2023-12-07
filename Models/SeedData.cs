@@ -15,7 +15,7 @@ namespace Assignment5_Meduna_Naumann.Models
             serviceProvider.GetRequiredService<
                 DbContextOptions<Assignment5_Meduna_NaumannContext>>()))
         {
-            // Look for any movies.
+            // Look for any songs.
             if (context.Song.Any())
             {
                 return;   // DB has been seeded
