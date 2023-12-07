@@ -38,7 +38,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.songs![0].price)
             </th>
-            <th></th>
+            <th>
+                Select
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -60,7 +62,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.price)
                 </td>
+                <td>
+                    <input name="AreChecked" type="checkbox" value="@item.Id" />
+                </td>
             </tr>
         }
     </tbody>
 </table>
+<form method="get">
+    <button>Add To Cart</button>
+</form>
