@@ -41,6 +41,7 @@ namespace Assignment5_Meduna_Naumann.Controllers
             }
             return RedirectToAction(nameof(Browse));
         }
+        // POST: RemoveCart
         [HttpPost]
         public IActionResult RemoveFromCart(string[] RemoveItems)
         {
@@ -48,16 +49,11 @@ namespace Assignment5_Meduna_Naumann.Controllers
             
             foreach (string i in RemoveItems)
             {
-                songs = songs.Union(from song in _context.Song where song.Id == Convert.ToInt32(i) select song);
+                songs = songs.Union(from song in cart where song.Id != Convert.ToInt32(i) select song);
             }
 
-            if (!songs.IsNullOrEmpty())
-            {
-                var temp = cart.ToList();
-                foreach(Song s in songs) { temp.Remove(s); }
-                cart = temp;
-            }
-
+            cart = songs.ToList();
+        
             return RedirectToAction(nameof(Cart));
         }
         
